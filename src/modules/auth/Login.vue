@@ -128,7 +128,7 @@ const login = async () => {
     }
 
     store.token = data.token;
-    localStorage.setItem('token', data.token); // si quieres persistir
+    localStorage.setItem('token', data.token); 
 
     router.push({ name: 'home' });
   } catch (error: any) {
