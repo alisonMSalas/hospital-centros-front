@@ -22,22 +22,13 @@ const router = createRouter({
       component: () => import('@/shared/components/Home.vue'),
       meta: { requiresAuth: true }
     },
-    {
-      path: '/centros-medicos',
-      name: 'centros_medicos',
-      component: () => import('@/modules/centros-medicos/CentrosMedicos.vue'),
-      meta: { requiresAuth: true }
-    },
+   
     {
       path: '/consultas-medicas',
       name: 'consultas_medicas',
       component: () => import('@/modules/consultas-medicas/ConsultasMedicas.vue'),
     },
-    {
-      path: '/empleados',
-      name: 'empleados',
-      component: () => import('@/modules/empleados/Empleados.vue'),
-    },
+   
     {
       path: '/especialidades',
       name: 'especialidades',

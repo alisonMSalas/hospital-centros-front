@@ -90,12 +90,7 @@ const toggleMenu = (event: Event) => {
 
 // Menu items
 const menuItems = ref([
-  {
-    label: 'Centros Médicos',
-    icon: 'pi pi-fw pi-building',
-    command: () => router.push({ name: 'centros_medicos' }),
-    routeName: 'centros_medicos',
-  },
+
   {
     label: 'Médicos',
     icon: 'fas fa-user-doctor',
@@ -108,12 +103,7 @@ const menuItems = ref([
     command: () => router.push({ name: 'especialidades' }),
     routeName: 'especialidades',
   },
-  {
-    label: 'Empleados',
-    icon: 'pi pi-fw pi-users',
-    command: () => router.push({ name: 'empleados' }),
-    routeName: 'empleados',
-  },
+  
   {
     label: 'Pacientes',
     icon: 'pi pi-fw pi-user-plus',
@@ -125,13 +115,7 @@ const menuItems = ref([
     icon: 'pi pi-fw pi-calendar',
     command: () => router.push({ name: 'consultas_medicas' }),
     routeName: 'consultas_medicas',
-  },
-  {
-    label: 'Control de Usuarios',
-    icon: 'pi pi-fw pi-user',
-    command: () => router.push({ name: 'usuarios' }),
-    routeName: 'usuarios',
-  },
+  }
 ]);
 
 const computedMenuItems = computed(() =>

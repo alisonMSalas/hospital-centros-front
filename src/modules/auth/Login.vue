@@ -123,9 +123,6 @@ const login = async () => {
 
     const payload = decodeToken(data.token);
 
-    if (!payload || payload.role !== 'admin') {
-      throw new Error('Acceso denegado. Solo administradores.');
-    }
 
     store.token = data.token;
     localStorage.setItem('token', data.token); 
