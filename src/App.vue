@@ -1,26 +1,19 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <MenuBar v-if="showMenu" />
+  <div class="content">
+    <router-view />
+  </div>
 </template>
+<script setup lang="ts">
+import { computed } from 'vue';
+import MenuBar from './shared/components/MenuBar.vue';
+import { useRoute } from 'vue-router';
+import { useAppStore } from './stores/app-store';
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+const route = useRoute();
+const store = useAppStore();
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+const showMenu = computed(() => {
+  return store.token !== '' && route.name !== 'login';
+});
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
