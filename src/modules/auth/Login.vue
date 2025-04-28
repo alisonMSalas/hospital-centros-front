@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div class="login-container">
     <div class="left-container">
       <h1 class="login-title">Inicio de sesión</h1>
@@ -94,6 +95,9 @@ import Image from 'primevue/image';
 import Dialog from 'primevue/dialog';
 import Dropdown from 'primevue/dropdown';
 import { useAppStore } from '@/stores/app-store';
+import { useToast } from 'primevue/usetoast'; 
+
+const toast = useToast();
 
 interface FormValues {
   username: string;
@@ -176,7 +180,12 @@ const login = async () => {
       router.push({ name: 'home' });
     }
   } catch (error: any) {
-    alert(error.message || 'Error al iniciar sesión');
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: error.message || 'Error al iniciar sesión',
+      life: 3000,
+    });
   }
 };
 
@@ -190,7 +199,12 @@ const confirmMedicalCenter = () => {
     showMedicalCenterDialog.value = false;
     router.push({ name: 'home' });
   } else {
-    alert('Por favor, seleccione un centro médico.');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'Por favor, seleccione un centro médico.',
+      life: 3000,
+    });
   }
 };
 

@@ -1,6 +1,7 @@
 <template>
   <h1 class="m-5">Consultas Médicas</h1>
   <Divider />
+  <Toast />
   <div class="container">
     <div class="table-container">
       <div class="actions">
@@ -283,6 +284,9 @@ import Textarea from 'primevue/textarea';
 import axios from 'axios';
 import apiClient from '../services/apiClient';
 import { useAppStore } from '@/stores/app-store';
+import { useToast } from 'primevue/usetoast'; 
+
+const toast = useToast();
 
 const store = useAppStore();
 
@@ -357,9 +361,19 @@ const getConsultas = async () => {
   } catch (error) {
     console.error('Error al obtener consultas médicas:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al obtener consultas médicas');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al obtener consultas médicas',
+        life: 3000
+      });
     } else {
-      alert('Error al obtener consultas médicas');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al obtener consultas médicas',
+        life: 3000
+      });
     }
   }
 };
@@ -371,9 +385,19 @@ const getMedicos = async () => {
   } catch (error) {
     console.error('Error al obtener médicos:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al obtener médicos');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al obtener médicos',
+        life: 3000
+      });
     } else {
-      alert('Error al obtener médicos');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al obtener médicos',
+        life: 3000
+      });
     }
   }
 };
@@ -385,9 +409,19 @@ const getPacientes = async () => {
   } catch (error) {
     console.error('Error al obtener pacientes:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al obtener pacientes');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al obtener pacientes',
+        life: 3000
+      });
     } else {
-      alert('Error al obtener pacientes');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al obtener pacientes',
+        life: 3000
+      });
     }
   }
 };
@@ -415,26 +449,52 @@ const saveConsulta = async () => {
     !newConsulta.value.diagnostico ||
     !newConsulta.value.centro_medico_id
   ) {
-    alert('Todos los campos son obligatorios');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'Todos los campos son obligatorios',
+      life: 3000
+    });
     return;
   }
   const inputDate = new Date(newConsulta.value.fecha);
   const currentDate = new Date();
   if (inputDate > currentDate) {
-    alert('La fecha de la consulta no puede ser futura');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'La fecha de la consulta no puede ser futura',
+      life: 3000
+    });
+    
     return;
   }
   try {
     await apiClient.post('/hospital/consulta-medica', newConsulta.value);
     await getConsultas();
     closeAddModal();
-    alert('Consulta médica creada exitosamente');
+    toast.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Consulta médica creada exitosamente',
+      life: 3000
+    });
   } catch (error) {
     console.error('Error al guardar consulta médica:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al guardar consulta médica');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al guardar consulta médica',
+        life: 3000
+      });
     } else {
-      alert('Error al guardar consulta médica');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al guardar consulta médica',
+        life: 3000
+      });
     }
   }
 };
@@ -470,26 +530,51 @@ const updateConsulta = async () => {
     !editConsulta.value.diagnostico ||
     !editConsulta.value.centro_medico_id
   ) {
-    alert('Todos los campos son obligatorios');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'Todos los campos son obligatorios',
+      life: 3000
+    });
     return;
   }
   const inputDate = new Date(editConsulta.value.fecha);
   const currentDate = new Date();
   if (inputDate > currentDate) {
-    alert('La fecha de la consulta no puede ser futura');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'La fecha de la consulta no puede ser futura',
+      life: 3000
+    });
     return;
   }
   try {
     await apiClient.put(`/hospital/consulta-medica/${editConsulta.value.id}`, editConsulta.value);
     await getConsultas();
     closeEditModal();
-    alert('Consulta médica actualizada exitosamente');
+    toast.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Consulta médica actualizada exitosamente',
+      life: 3000
+    });
   } catch (error) {
     console.error('Error al actualizar consulta médica:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al actualizar consulta médica');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al actualizar consulta médica',
+        life: 3000
+      });
     } else {
-      alert('Error al actualizar consulta médica');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al actualizar consulta médica',
+        life: 3000
+      });
     }
   }
 };
@@ -518,14 +603,29 @@ const deleteConsulta = async () => {
       await apiClient.delete(`/hospital/consulta-medica/${consultaToDelete.value.id}`);
       await getConsultas();
       closeDeleteModal();
-      alert('Consulta médica eliminada exitosamente');
+      toast.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Consulta médica eliminada exitosamente',
+        life: 3000
+      });
     }
   } catch (error) {
     console.error('Error al eliminar consulta médica:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al eliminar consulta médica');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al eliminar consulta médica',
+        life: 3000
+      });
     } else {
-      alert('Error al eliminar consulta médica');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al eliminar consulta médica',
+        life: 3000
+      });
     }
   }
 };

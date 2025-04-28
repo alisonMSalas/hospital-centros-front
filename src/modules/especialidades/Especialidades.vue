@@ -1,6 +1,7 @@
 <template>
   <h1 class="m-5">Especialidades</h1>
   <Divider />
+  <Toast />
   <div class="container">
     <div class="table-container">
       <div class="actions">
@@ -51,6 +52,9 @@ import InputIcon from 'primevue/inputicon';
 import axios from 'axios';
 import apiClient from '../services/apiClient';
 import { useAppStore } from '@/stores/app-store';
+import { useToast } from 'primevue/usetoast'; 
+
+const toast = useToast();
 
 const store = useAppStore();
 const apiUrl = store.apiUrl;
@@ -94,9 +98,19 @@ const getEspecialidades = async () => {
   } catch (error) {
     console.error('Error al obtener especialidades:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al obtener especialidades');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al obtener especialidades',
+        life: 3000,
+      });
     } else {
-      alert('Error al obtener especialidades');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al obtener especialidades',
+        life: 3000,
+      });
     }
   }
 };

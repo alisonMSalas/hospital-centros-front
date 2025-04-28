@@ -5,7 +5,8 @@ import App from './App.vue';
 import router from './router';
 import PrimeVue from 'primevue/config';
 import { CustomPreset } from './styles/presets/custom-preset';
-
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice'; 
 import './styles/global.css';
 import 'primeicons/primeicons.css';
 
@@ -23,5 +24,7 @@ app.use(PrimeVue, {
     },
   },
 });
+app.use(ToastService);
+app.component('Toast', Toast);
 
 app.mount('#app');

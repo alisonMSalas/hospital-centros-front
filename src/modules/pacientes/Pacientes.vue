@@ -1,6 +1,7 @@
 <template>
   <h1 class="m-5">Pacientes</h1>
   <Divider />
+  <Toast />
   <div class="container">
     <div class="table-container">
       <div class="actions">
@@ -133,6 +134,9 @@ import Select from 'primevue/select';
 import axios from 'axios';
 import apiClient from '../services/apiClient';
 import { useAppStore } from '@/stores/app-store';
+import { useToast } from 'primevue/usetoast'; 
+
+const toast = useToast();
 
 const store = useAppStore();
 const filters = ref({
@@ -186,9 +190,20 @@ const getPacientes = async () => {
   } catch (error) {
     console.error('Error al obtener pacientes:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al obtener pacientes');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al obtener pacientes',
+        life: 3000,
+      });
     } else {
-      alert('Error al obtener pacientes');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al obtener pacientes',
+        life: 3000,
+      });
+      
     }
   }
 };
@@ -209,20 +224,40 @@ const savePaciente = async () => {
     !newPaciente.value.fechaNacimiento ||
     !newPaciente.value.centroMedicoId
   ) {
-    alert('Todos los campos son obligatorios');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'Todos los campos son obligatorios',
+      life: 3000,
+    });
     return;
   }
   try {
     await apiClient.post('/hospital/paciente', newPaciente.value);
     await getPacientes();
     closeAddModal();
-    alert('Paciente creado exitosamente');
+    toast.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Paciente creado exitosamente',
+      life: 3000,
+    });
   } catch (error) {
     console.error('Error al guardar paciente:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al guardar paciente');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al guardar paciente',
+        life: 3000,
+      });
     } else {
-      alert('Error al guardar paciente');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al guardar paciente',
+        life: 3000,
+      });
     }
   }
 };
@@ -256,20 +291,40 @@ const updatePaciente = async () => {
     !editPaciente.value.fechaNacimiento ||
     !editPaciente.value.centroMedicoId
   ) {
-    alert('Todos los campos son obligatorios');
+    toast.add({
+      severity: 'warn',
+      summary: 'Advertencia',
+      detail: 'Todos los campos son obligatorios',
+      life: 3000,
+    });
     return;
   }
   try {
     await apiClient.put(`/hospital/paciente/${editPaciente.value.id}`, editPaciente.value);
     await getPacientes();
     closeEditModal();
-    alert('Paciente actualizado exitosamente');
+    toast.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Paciente actualizado exitosamente',
+      life: 3000,
+    });
   } catch (error) {
     console.error('Error al actualizar paciente:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al actualizar paciente');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al actualizar paciente',
+        life: 3000,
+      });
     } else {
-      alert('Error al actualizar paciente');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al actualizar paciente',
+        life: 3000,
+      });
     }
   }
 };
@@ -291,13 +346,28 @@ const deletePaciente = async () => {
     }
     await getPacientes();
     closeDeleteModal();
-    alert('Paciente eliminado exitosamente');
+    toast.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Paciente eliminado exitosamente',
+      life: 3000,
+    });
   } catch (error) {
     console.error('Error al eliminar paciente:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al eliminar paciente');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al eliminar paciente',
+        life: 3000,
+      });
     } else {
-      alert('Error al eliminar paciente');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al eliminar paciente',
+        life: 3000,
+      });
     }
   }
 };

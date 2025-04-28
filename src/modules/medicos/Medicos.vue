@@ -1,6 +1,7 @@
 <template>
   <h1 class="m-5">Médicos</h1>
   <Divider />
+  <Toast />
   <div class="container">
     <div class="table-container">
       <div class="actions">
@@ -51,6 +52,9 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import apiClient from '../services/apiClient';
 import axios from 'axios';
+import { useToast } from 'primevue/usetoast'; 
+
+const toast = useToast();
 
 // Estado para filtros
 const filters = ref({
@@ -74,9 +78,20 @@ const getMedicos = async () => {
   } catch (error) {
     console.error('Error al obtener médicos:', error);
     if (axios.isAxiosError(error)) {
-      alert(error.response?.data?.message || 'Error al obtener médicos');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Error al obtener médicos',
+        life: 3000,
+      });
+      
     } else {
-      alert('Error al obtener médicos');
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al obtener médicos',
+        life: 3000,
+      });
     }
   }
 };
