@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="left-container">
       <h1 class="login-title">Inicio de sesión</h1>
-      <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit">
+      <Form v-slot="$form" :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit">
         <div class="form-group">
           <div class="field">
             <InputText
@@ -44,6 +44,7 @@
         <Button type="submit" class="submit-btn">Submit</Button>
       </Form>
     </div>
+
     <div class="right-container">
       <Image>
         <template #image>
@@ -51,6 +52,34 @@
         </template>
       </Image>
     </div>
+
+    <!-- Dialog for Admin to Select Medical Center -->
+    <Dialog
+      v-model:visible="showMedicalCenterDialog"
+      header="Seleccionar Centro Médico"
+      :modal="true"
+      :style="{ width: '30rem' }"
+    >
+      <div class="dialog-content">
+        <p>Por favor, seleccione el centro médico que desea administrar:</p>
+        <Dropdown
+          v-model="selectedMedicalCenter"
+          :options="medicalCenters"
+          option-label="name"
+          option-value="id"
+          placeholder="Seleccione un centro médico"
+          class="w-full"
+        />
+      </div>
+      <template #footer>
+        <Button
+          label="Confirmar"
+          icon="pi pi-check"
+          @click="confirmMedicalCenter"
+          :disabled="!selectedMedicalCenter"
+        />
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -62,6 +91,8 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Message from 'primevue/message';
 import Image from 'primevue/image';
+import Dialog from 'primevue/dialog';
+import Dropdown from 'primevue/dropdown';
 import { useAppStore } from '@/stores/app-store';
 
 interface FormValues {
@@ -69,28 +100,34 @@ interface FormValues {
   password: string;
 }
 
-
+interface MedicalCenter {
+  id: number;
+  name: string;
+}
 
 const router = useRouter();
 const store = useAppStore();
+
 const initialValues = ref<FormValues>({
   username: '',
   password: '',
 });
 
+const showMedicalCenterDialog = ref(false);
+const medicalCenters = ref<MedicalCenter[]>([]);
+const selectedMedicalCenter = ref<number | null>(null);
+
 const apiUrl = store.apiUrl;
 
-const resolver = ({
-  values,
-}: FormResolverOptions): Promise<Record<string, any>> | Record<string, any> | undefined => {
+const resolver = ({ values }: FormResolverOptions): Record<string, any> => {
   const errors: Record<string, { message: string }[]> = {};
 
   if (!values.username) {
-    errors.username = [{ message: 'Username is required.' }];
+    errors.username = [{ message: 'El nombre de usuario es requerido.' }];
   }
 
   if (!values.password) {
-    errors.password = [{ message: 'Password is required.' }];
+    errors.password = [{ message: 'La contraseña es requerida.' }];
   }
 
   return {
@@ -107,7 +144,7 @@ const onFormSubmit = ({ valid }: FormSubmitEvent<Record<string, any>>): void => 
 
 const login = async () => {
   try {
-    const response = await fetch(apiUrl + '/auth/login', {
+    const response = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -120,16 +157,40 @@ const login = async () => {
     }
 
     const data = await response.json();
-
     const payload = decodeToken(data.token);
 
+    if (!payload || !payload.role) {
+      throw new Error('Token inválido o sin rol');
+    }
 
     store.token = data.token;
-    localStorage.setItem('token', data.token); 
+    localStorage.setItem('token', data.token);
 
-    router.push({ name: 'home' });
+    if (payload.role === 'admin') {
+      medicalCenters.value = [
+        { id: 2, name: 'Centro Médico Guayaquil' },
+        { id: 3, name: 'Centro Médico Cuenca' },
+      ];
+      showMedicalCenterDialog.value = true;
+    } else {
+      router.push({ name: 'home' });
+    }
   } catch (error: any) {
     alert(error.message || 'Error al iniciar sesión');
+  }
+};
+
+
+
+
+const confirmMedicalCenter = () => {
+  if (selectedMedicalCenter.value !== null) {
+    store.centro = selectedMedicalCenter.value as unknown as string;
+    localStorage.setItem('selectedMedicalCenter', selectedMedicalCenter.value.toString());
+    showMedicalCenterDialog.value = false;
+    router.push({ name: 'home' });
+  } else {
+    alert('Por favor, seleccione un centro médico.');
   }
 };
 
@@ -142,8 +203,6 @@ function decodeToken(token: string) {
     return null;
   }
 }
-
-
 </script>
 
 <style scoped lang="scss">
@@ -225,5 +284,15 @@ function decodeToken(token: string) {
 
 .submit-btn:hover {
   background-color: #5a6268;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.w-full {
+  width: 100%;
 }
 </style>
