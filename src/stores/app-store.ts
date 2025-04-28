@@ -6,7 +6,7 @@ export const useAppStore = defineStore('app', () => {
   const token = ref<string>(localStorage.getItem('token') || '');
   const centro = ref<string>(localStorage.getItem('centro') || '');
 
-  const apiUrl = ref('http://localhost:3000/api');
+  const apiUrl = ref('http://34.23.223.70:3000/api');
 
 
   watch(token, (newToken) => {
