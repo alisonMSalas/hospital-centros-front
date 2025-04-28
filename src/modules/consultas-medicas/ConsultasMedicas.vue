@@ -41,7 +41,7 @@
           </template>
         </Column>
         <Column field="diagnostico" header="Diagnóstico" :showFilterMenu="false" sortable />
-        <Column header="Acciones">
+        <Column header="Acciones" class="action-column">
           <template #body="slotProps">
             <Button
               icon="pi pi-pencil"
@@ -852,5 +852,12 @@ onMounted(() => {
       }
     }
   }
+}
+
+.action-column {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 </style>
