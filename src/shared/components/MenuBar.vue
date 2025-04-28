@@ -78,6 +78,7 @@ const userMenuItems = ref([
     label: 'Cerrar sesión',
     icon: 'pi pi-sign-out',
     command: logout,
+    class: 'logout-menu-item',
   },
 ]);
 

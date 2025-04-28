@@ -52,7 +52,7 @@ import InputIcon from 'primevue/inputicon';
 import axios from 'axios';
 import apiClient from '../services/apiClient';
 import { useAppStore } from '@/stores/app-store';
-import { useToast } from 'primevue/usetoast'; 
+import { useToast } from 'primevue/usetoast';
 
 const toast = useToast();
 
@@ -76,20 +76,16 @@ apiClientInstance.interceptors.request.use((config) => {
   return config;
 });
 
-
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
-
 
 const deleteFilters = () => {
   filters.value.global.value = null;
 };
 
-
 const especialidades = ref([]);
 const selectedEspecialidad = ref();
-
 
 const getEspecialidades = async () => {
   try {
@@ -128,7 +124,7 @@ onMounted(() => {
   align-items: center;
   gap: 1rem;
   margin-top: 1rem;
-  width: 100%;
+  width: fit-content;
 
   .table-container {
     display: flex;

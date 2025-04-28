@@ -33,7 +33,12 @@
         tableStyle="min-width: 50rem"
       >
         <Column field="nombre" header="Nombre" :showFilterMenu="false" sortable />
-        <Column field="especialidad.nombre" header="Especialidad" :showFilterMenu="false" sortable />
+        <Column
+          field="especialidad.nombre"
+          header="Especialidad"
+          :showFilterMenu="false"
+          sortable
+        />
         <template #empty>No se encontraron médicos.</template>
       </DataTable>
     </div>
@@ -52,7 +57,7 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import apiClient from '../services/apiClient';
 import axios from 'axios';
-import { useToast } from 'primevue/usetoast'; 
+import { useToast } from 'primevue/usetoast';
 
 const toast = useToast();
 
@@ -84,7 +89,6 @@ const getMedicos = async () => {
         detail: error.response?.data?.message || 'Error al obtener médicos',
         life: 3000,
       });
-      
     } else {
       toast.add({
         severity: 'error',
@@ -109,7 +113,7 @@ onMounted(() => {
   align-items: center;
   gap: 1rem;
   margin-top: 1rem;
-  width: 100%;
+  width: fit-content;
 
   .table-container {
     display: flex;
